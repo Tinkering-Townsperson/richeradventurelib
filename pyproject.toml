@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
 	{ name = "Paya Maroufi", email = "h2o.Drop2010+hackclub@gmail.com" }
 ]
-requires-python = ">=3.10,<=3.14"
+requires-python = ">=3.10,<4.0"
 
 classifiers = [
 	'Development Status :: 4 - Beta',
@@ -26,3 +26,10 @@ include = "richeradventurelib.py"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+	"build (>=1.4.0,<2.0.0)",
+	"twine (>=6.2.0,<7.0.0)",
+	"pytest (>=9.0.2,<10.0.0)",
+]
