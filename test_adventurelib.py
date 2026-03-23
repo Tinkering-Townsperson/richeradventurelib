@@ -5,8 +5,8 @@ from unittest.mock import patch
 
 import pytest
 
-import adventurelib
-from adventurelib import (
+import richeradventurelib
+from richeradventurelib import (
     Bag,
     InvalidCommand,
     Item,
@@ -21,19 +21,19 @@ from adventurelib import (
 @contextmanager
 def active_context(ctx):
     """Context manager to set the current command context."""
-    prev_ctx = adventurelib.current_context
-    adventurelib.set_context(ctx)
+    prev_ctx = richeradventurelib.current_context
+    richeradventurelib.set_context(ctx)
     try:
         yield
     finally:
-        adventurelib.set_context(prev_ctx)
+        richeradventurelib.set_context(prev_ctx)
 
 
 @pytest.fixture(autouse=True)
 def setup_commands():
-    orig_commands = adventurelib.commands[:]
+    orig_commands = richeradventurelib.commands[:]
     yield
-    adventurelib.commands[:] = orig_commands
+    richeradventurelib.commands[:] = orig_commands
 
 
 @pytest.fixture(autouse=True)
@@ -144,7 +144,7 @@ def test_register():
         nonlocal called
         called = True
 
-    print(adventurelib.commands)
+    print(richeradventurelib.commands)
     _handle_command("north")
     assert called is True
 
@@ -331,7 +331,7 @@ def test_bag_find():
 @pytest.mark.parametrize("current_context", ["foo", "foo.bar", "foo.bar.baz"])
 def test_match_context(current_context):
     """We can match contexts."""
-    assert adventurelib._match_context("foo", current_context)
+    assert richeradventurelib._match_context("foo", current_context)
 
 
 @pytest.mark.parametrize(
@@ -340,59 +340,59 @@ def test_match_context(current_context):
 )
 def test_no_match_context(current_context):
     """A context doesn't match if it is not "within" the pattern context."""
-    assert not adventurelib._match_context("foo", current_context)
+    assert not richeradventurelib._match_context("foo", current_context)
 
 
 def test_match_context_none():
     """The current context matches if the pattern context is None."""
-    assert adventurelib._match_context(None, "foo.bar")
+    assert richeradventurelib._match_context(None, "foo.bar")
 
 
 @pytest.mark.parametrize("context", [None, "foo", "foo.bar"])
 def test_validate_context(context):
     """We can validate valid contexts."""
-    adventurelib._validate_context(context)
+    richeradventurelib._validate_context(context)
 
 
 def test_validate_context_empty():
     """An empty string is not a valid context."""
     with pytest.raises(ValueError) as exc:
-        adventurelib._validate_context("")
+        richeradventurelib._validate_context("")
     assert str(exc.value) == "Context '' may not be empty"
 
 
 def test_validate_context_start_dot():
     """A context that starts with . is invalid."""
     with pytest.raises(ValueError) as exc:
-        adventurelib._validate_context(".foo")
+        richeradventurelib._validate_context(".foo")
     assert str(exc.value) == "Context '.foo' may not start with ."
 
 
 def test_validate_context_end_dot():
     """A context that ends with . is invalid."""
     with pytest.raises(ValueError) as exc:
-        adventurelib._validate_context("foo.bar.")
+        richeradventurelib._validate_context("foo.bar.")
     assert str(exc.value) == "Context 'foo.bar.' may not end with ."
 
 
 def test_validate_context_double_dot():
     """A context that contains .. is invalid."""
     with pytest.raises(ValueError) as exc:
-        adventurelib._validate_context("foo..bar")
+        richeradventurelib._validate_context("foo..bar")
     assert str(exc.value) == "Context 'foo..bar' may not contain .."
 
 
 def test_validate_context_wrong():
     """A context that is wrong in various ways has a custom message."""
     with pytest.raises(ValueError) as exc:
-        adventurelib._validate_context(".foo.bar.")
+        richeradventurelib._validate_context(".foo.bar.")
     err = str(exc.value)
     assert err == "Context '.foo.bar.' may not start with . or end with ."
 
 
 def test_validate_pattern_double_ident():
     """A pattern with identifier used twice is incorrect"""
-    with pytest.raises(adventurelib.InvalidCommand) as exc:
+    with pytest.raises(richeradventurelib.InvalidCommand) as exc:
         Pattern("take I with I")
     err = str(exc.value)
     assert err == "Invalid command 'take I with I'" " Identifiers may only be used once"
