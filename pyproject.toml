@@ -1,0 +1,28 @@
+[project]
+name = "richeradventurelib"
+description = "A minimal library for writing text adventure games in Python 3, now with rich text!"
+version = "1.2.1"
+readme = "README.md"
+authors = [
+	{ name = "Paya Maroufi", email = "h2o.Drop2010+hackclub@gmail.com" }
+]
+requires-python = ">=3.10,<=3.14"
+
+classifiers = [
+	'Development Status :: 4 - Beta',
+	'Intended Audience :: Education',
+	'Programming Language :: Python :: 3 :: Only',
+	'Topic :: Education',
+	'Topic :: Games/Entertainment',
+]
+
+dependencies = [
+	"rich>=14.0.0,<15.0.0",
+]
+
+[[tool.poetry.packages]]
+include = "richeradventurelib.py"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

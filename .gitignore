@@ -91,3 +91,6 @@ ENV/
 doc/_build
 
 *.swp
+
+# Poetry files
+poetry.lock
