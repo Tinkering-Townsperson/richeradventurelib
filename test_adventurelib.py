@@ -200,7 +200,7 @@ def test_register_match():
 
 def say_at_width(width, msg):
     buf = StringIO()
-    with patch("adventurelib.get_terminal_size", return_value=(width, 24)):
+    with patch("richeradventurelib.get_terminal_size", return_value=(width, 24)):
         with redirect_stdout(buf):
             say(msg)
     return buf.getvalue()
